@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	var url = 'https://api.foursquare.com/v2/venues/explore?' +
-	'near=Portland,%20OR&' + 
+	'near=Portland,%20OR&' +
 	'client_id=ZEFCPOZI0JUGL1H2IKFMHO1PLHSWCOKKZSDOUSPHYQ2QHNEO&' +
 	'client_secret=I214RPZ3LOUZXYXAESRLBGZRJCVI2J1EKYPVSOGPPCH5RZQN&'+
 	'v=20140612&' +
@@ -14,15 +14,19 @@ $(document).ready(function() {
 		console.log('success (promises): ' + data);
 		var dataArray = data.response.groups[0].items;
 		console.log(dataArray);
-		// console.log(data.response.groups[0].items[2].venue.photos.groups[0].items[0]);
-		generatePics(assemblePicUrl(data));
+
+		var rngNumb = Math.floor((Math.random() * 30));
+		var placeArray = data.response.groups[0].items[rngNumb];
+		generatePics(generatePicUrl(placeArray));
+
+		generateTitle(placeArray);
 	}, function(xhr, status, error) {
 		console.log(status);
 		console.log('failed (promises): ' + error);
 	});
 });
 
-var assemblePicUrl = function(obj) {
+var randomizePicUrl = function(obj) {
 	var rngNumb = Math.floor((Math.random() * 30));
 	var placeArray = obj.response.groups[0].items[rngNumb];
 	var url = generatePicUrl(placeArray);
@@ -30,8 +34,6 @@ var assemblePicUrl = function(obj) {
 };
 
 var generatePicUrl = function(array) {
-	// https://irs0.4sqi.net/img/general/300x500/2341723_vt1Kr-SfmRmdge-M7b4KNgX2_PHElyVbYL65pMnxEQw.jpg
-	// https://ss1.4sqi.net/img/categories_v2/food/icecream_/original.png
 	var prefix = array.venue.photos.groups[0].items[0].prefix;
 	var size = '500x500';
 	var suffix = array.venue.photos.groups[0].items[0].suffix;
@@ -40,5 +42,13 @@ var generatePicUrl = function(array) {
 };
 
 function generatePics(urlGenerated) {
-		$('div.img').append('<img src="' + urlGenerated + '"/>').addClass('pic');
+		$('div.img').append('<img src="' + urlGenerated + '"/>');
 	}
+function generateTitle (array) {
+		$('div.title').append(array.venue.name);
+	}
+
+
+
+
+

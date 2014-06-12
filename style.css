@@ -6,3 +6,10 @@
 body{
 	background-color: black;
 }
+.title{
+	text-transform: uppercase;
+	text-align: center;
+	color: white;
+	font-family: Arial;
+	font-size: 40px;
+}
