@@ -1,13 +1,20 @@
 $(document).ready(function() {
-	var url = 'https://api.foursquare.com/v2/venues/search?' +
-	'll=40.7,-74&' + 
-	'oauth_token=JP04W21OWYKPVTZJ3PSALNNCTT2G5H1KBLNNSJR3OZFDGRDF&v=20140612';
+	var url = 'https://api.foursquare.com/v2/venues/explore?' +
+	'near=Portland,%20OR&' + 
+	'client_id=ZEFCPOZI0JUGL1H2IKFMHO1PLHSWCOKKZSDOUSPHYQ2QHNEO&' +
+	'client_secret=I214RPZ3LOUZXYXAESRLBGZRJCVI2J1EKYPVSOGPPCH5RZQN&'+
+	'v=20140612&' +
+	'radius=1000&' +
+	'section=food&' +
+	'limit=20&' +
+	'venuePhotos=1&';
+	console.log(url);
 	$.ajax(url, { dataType: 'jsonp' })
 	.then(function(data, status, xhr) {
 		console.log(status);
 		console.log('success (promises): ' + data);
-		console.log(data.response.venues[0].categories[0].icon.prefix);
-		console.log(assemblePicUrl(data));
+		console.log(data);
+		console.log(data.response);
 	}, function(xhr, status, error) {
 		console.log(status);
 		console.log('failed (promises): ' + error);
