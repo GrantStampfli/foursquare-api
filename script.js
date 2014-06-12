@@ -6,7 +6,7 @@ $(document).ready(function() {
 	'v=20140612&' +
 	'radius=2000&' +
 	'section=food&' +
-	'limit=200&' +
+	'limit=100&' +
 	'venuePhotos=1&';
 	$.ajax(url, { dataType: 'jsonp' })
 	.then(function(data, status, xhr) {
@@ -14,7 +14,7 @@ $(document).ready(function() {
 		console.log('success (promises): ' + data);
 		var dataArray = data.response.groups[0].items;
 
-		var rngNumb = Math.floor((Math.random() * 200));
+		var rngNumb = Math.floor((Math.random() * 100));
 		var placeArray = data.response.groups[0].items[rngNumb];
 		generatePics(generatePicUrl(placeArray));
 		generateTitle(placeArray);
