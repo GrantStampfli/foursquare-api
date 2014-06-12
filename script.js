@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	'use strict';
 	var url = 'https://api.foursquare.com/v2/venues/explore?';
 	var fourSquareOptions = {
     'near': 'Portland, OR',
@@ -40,10 +41,11 @@ var generatePicUrl = function(array) {
 };
 
 function generatePics(urlGenerated) {
-		$('div.img').append('<img src="' + urlGenerated + '"/>');
+		$('<img>').attr('src', urlGenerated).appendTo('div.img');
 	}
 function generateTitle (array) {
-		$('div.title').append(array.venue.name);
+		$('<h3>').text(array.venue.name).appendTo('div.title');
+		// $('div.title').append(array.venue.name);
 	}
 
 var map;
