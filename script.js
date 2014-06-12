@@ -8,14 +8,14 @@ $(document).ready(function() {
 	'section=food&' +
 	'limit=30&' +
 	'venuePhotos=1&';
-	console.log(url);
 	$.ajax(url, { dataType: 'jsonp' })
 	.then(function(data, status, xhr) {
 		console.log(status);
 		console.log('success (promises): ' + data);
-		console.log(data);
-		console.log(data.response.groups[0].items[2].venue.photos.groups[0].items[0]);
-		console.log(assemblePicUrl(data));
+		var dataArray = data.response.groups[0].items;
+		console.log(dataArray);
+		// console.log(data.response.groups[0].items[2].venue.photos.groups[0].items[0]);
+		generatePics(assemblePicUrl(data));
 	}, function(xhr, status, error) {
 		console.log(status);
 		console.log('failed (promises): ' + error);
@@ -23,7 +23,7 @@ $(document).ready(function() {
 });
 
 var assemblePicUrl = function(obj) {
-	var rngNumb = Math.floor((Math.random() * 30) + 1);
+	var rngNumb = Math.floor((Math.random() * 30));
 	var placeArray = obj.response.groups[0].items[rngNumb];
 	var url = generatePicUrl(placeArray);
 	return url;
@@ -38,3 +38,7 @@ var generatePicUrl = function(array) {
 	var url = prefix + size + suffix ;
 	return url;
 };
+
+function generatePics(urlGenerated) {
+		$('body').append('<img src="' + urlGenerated + '"/>');
+	}
