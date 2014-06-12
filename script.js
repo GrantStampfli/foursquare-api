@@ -26,13 +26,6 @@ $(document).ready(function() {
 	});
 });
 
-var randomizePicUrl = function(obj) {
-	var rngNumb = Math.floor((Math.random() * 30));
-	var placeArray = obj.response.groups[0].items[rngNumb];
-	var url = generatePicUrl(placeArray);
-	return url;
-};
-
 var generatePicUrl = function(array) {
 	var prefix = array.venue.photos.groups[0].items[0].prefix;
 	var size = '500x500';
