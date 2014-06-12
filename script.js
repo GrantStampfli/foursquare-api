@@ -6,7 +6,7 @@ $(document).ready(function() {
 	'v=20140612&' +
 	'radius=1000&' +
 	'section=food&' +
-	'limit=20&' +
+	'limit=30&' +
 	'venuePhotos=1&';
 	console.log(url);
 	$.ajax(url, { dataType: 'jsonp' })
@@ -14,7 +14,8 @@ $(document).ready(function() {
 		console.log(status);
 		console.log('success (promises): ' + data);
 		console.log(data);
-		console.log(data.response);
+		console.log(data.response.groups[0].items[2].venue.photos.groups[0].items[0]);
+		console.log(assemblePicUrl(data));
 	}, function(xhr, status, error) {
 		console.log(status);
 		console.log('failed (promises): ' + error);
@@ -23,17 +24,17 @@ $(document).ready(function() {
 
 var assemblePicUrl = function(obj) {
 	var rngNumb = Math.floor((Math.random() * 30) + 1);
-	var placeArray = obj.response.venues;
-	var url = generatePicUrl(placeArray, rngNumb);
+	var placeArray = obj.response.groups[0].items[rngNumb];
+	var url = generatePicUrl(placeArray);
 	return url;
 };
 
-var generatePicUrl = function(array, numb) {
+var generatePicUrl = function(array) {
 	// https://irs0.4sqi.net/img/general/300x500/2341723_vt1Kr-SfmRmdge-M7b4KNgX2_PHElyVbYL65pMnxEQw.jpg
 	// https://ss1.4sqi.net/img/categories_v2/food/icecream_/original.png
-	var prefix = array[numb].categories[0].icon.prefix;
+	var prefix = array.venue.photos.groups[0].items[0].prefix;
 	var size = 'original';
-	var suffix = array[numb].categories[0].icon.suffix;
+	var suffix = array.venue.photos.groups[0].items[0].suffix;
 	var url = prefix + size + suffix ;
 	return url;
 };
