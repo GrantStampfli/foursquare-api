@@ -1,5 +1,7 @@
 $(document).ready(function() {
 	'use strict';
+	var location = getLocation();
+	console.log(location);
 	var url = 'https://api.foursquare.com/v2/venues/explore?';
 	var fourSquareOptions = {
     'near': 'Portland, OR',
@@ -65,10 +67,11 @@ var marker = new google.maps.Marker({
 
 marker.setMap(map);
   }
-
-console.log(navigator.geolocation.getCurrentPosition(function(position) {
-  do_something(position.coords.latitude, position.coords.longitude);
-}));
+var getLocation = function (argument) {
+	navigator.geolocation.getCurrentPosition(function(position) {
+  return (position.coords.latitude, position.coords.longitude);
+	});
+};
 
 
 
