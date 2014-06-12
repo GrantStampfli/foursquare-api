@@ -4,9 +4,9 @@ $(document).ready(function() {
 	'client_id=ZEFCPOZI0JUGL1H2IKFMHO1PLHSWCOKKZSDOUSPHYQ2QHNEO&' +
 	'client_secret=I214RPZ3LOUZXYXAESRLBGZRJCVI2J1EKYPVSOGPPCH5RZQN&'+
 	'v=20140612&' +
-	'radius=1000&' +
+	'radius=2000&' +
 	'section=food&' +
-	'limit=30&' +
+	'limit=200&' +
 	'venuePhotos=1&';
 	$.ajax(url, { dataType: 'jsonp' })
 	.then(function(data, status, xhr) {
@@ -14,7 +14,7 @@ $(document).ready(function() {
 		console.log('success (promises): ' + data);
 		var dataArray = data.response.groups[0].items;
 
-		var rngNumb = Math.floor((Math.random() * 30));
+		var rngNumb = Math.floor((Math.random() * 200));
 		var placeArray = data.response.groups[0].items[rngNumb];
 		generatePics(generatePicUrl(placeArray));
 		generateTitle(placeArray);
@@ -28,13 +28,6 @@ $(document).ready(function() {
 		console.log('failed (promises): ' + error);
 	});
 });
-
-var randomizePicUrl = function(obj) {
-	var rngNumb = Math.floor((Math.random() * 30));
-	var placeArray = obj.response.groups[0].items[rngNumb];
-	var url = generatePicUrl(placeArray);
-	return url;
-};
 
 var generatePicUrl = function(array) {
 	var prefix = array.venue.photos.groups[0].items[0].prefix;
@@ -62,10 +55,10 @@ var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions)
 
 var marker = new google.maps.Marker({
     position: myLatlng,
-    title:"Hello World!"
+    title:""
 });
 
-// To add the marker to the map, call setMap();
+
 marker.setMap(map);
   }
 
