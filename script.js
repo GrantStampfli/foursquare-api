@@ -1,14 +1,16 @@
 $(document).ready(function() {
-	var url = 'https://api.foursquare.com/v2/venues/explore?' +
-	'near=Portland,%20OR&' +
-	'client_id=ZEFCPOZI0JUGL1H2IKFMHO1PLHSWCOKKZSDOUSPHYQ2QHNEO&' +
-	'client_secret=I214RPZ3LOUZXYXAESRLBGZRJCVI2J1EKYPVSOGPPCH5RZQN&'+
-	'v=20140612&' +
-	'radius=2000&' +
-	'section=food&' +
-	'limit=100&' +
-	'venuePhotos=1&';
-	$.ajax(url, { dataType: 'jsonp' })
+	var url = 'https://api.foursquare.com/v2/venues/explore?';
+	var fourSquareOptions = {
+    'near': 'Portland, OR',
+ 		'client_id': 'ZEFCPOZI0JUGL1H2IKFMHO1PLHSWCOKKZSDOUSPHYQ2QHNEO',
+		'client_secret': 'I214RPZ3LOUZXYXAESRLBGZRJCVI2J1EKYPVSOGPPCH5RZQN',
+		'v': '20140612',
+		'radius': '2000',
+		'section': 'food',
+		'limit': '100',
+		'venuePhotos': '1'
+	};
+	$.ajax(url, { dataType: 'jsonp', data: fourSquareOptions})
 	.then(function(data, status, xhr) {
 		console.log(status);
 		console.log('success (promises): ' + data);
@@ -61,5 +63,9 @@ var marker = new google.maps.Marker({
 
 marker.setMap(map);
   }
+
+console.log(navigator.geolocation.getCurrentPosition(function(position) {
+  do_something(position.coords.latitude, position.coords.longitude);
+}));
 
 
