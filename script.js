@@ -13,13 +13,16 @@ $(document).ready(function() {
 		console.log(status);
 		console.log('success (promises): ' + data);
 		var dataArray = data.response.groups[0].items;
-		console.log(dataArray);
 
 		var rngNumb = Math.floor((Math.random() * 30));
 		var placeArray = data.response.groups[0].items[rngNumb];
 		generatePics(generatePicUrl(placeArray));
-
 		generateTitle(placeArray);
+		var latitude = placeArray.venue.location.lat;
+		var longitude =placeArray.venue.location.lng;
+		console.log(latitude, longitude);
+		google.maps.event.addDomListener(window, 'load', initialize(latitude, longitude));
+
 	}, function(xhr, status, error) {
 		console.log(status);
 		console.log('failed (promises): ' + error);
@@ -41,7 +44,22 @@ function generateTitle (array) {
 		$('div.title').append(array.venue.name);
 	}
 
+var map;
+function initialize(lat, lng) {
+  var myLatlng = new google.maps.LatLng(lat, lng);
+var mapOptions = {
+  zoom: 16,
+  center: myLatlng
+};
+var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-AIzaSyCiWXjY3kc8sPKIqlH_4xnZDqZ5TPxGGq0
+var marker = new google.maps.Marker({
+    position: myLatlng,
+    title:"Hello World!"
+});
+
+// To add the marker to the map, call setMap();
+marker.setMap(map);
+  }
 
 
