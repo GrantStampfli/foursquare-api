@@ -33,12 +33,12 @@ var generatePicUrl = function(array) {
 	// https://irs0.4sqi.net/img/general/300x500/2341723_vt1Kr-SfmRmdge-M7b4KNgX2_PHElyVbYL65pMnxEQw.jpg
 	// https://ss1.4sqi.net/img/categories_v2/food/icecream_/original.png
 	var prefix = array.venue.photos.groups[0].items[0].prefix;
-	var size = 'original';
+	var size = '500x500';
 	var suffix = array.venue.photos.groups[0].items[0].suffix;
 	var url = prefix + size + suffix ;
 	return url;
 };
 
 function generatePics(urlGenerated) {
-		$('body').append('<img src="' + urlGenerated + '"/>');
+		$('div.img').append('<img src="' + urlGenerated + '"/>').addClass('pic');
 	}
