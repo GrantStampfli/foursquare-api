@@ -1,18 +1,19 @@
-/* global $ */ 'use strict';
+/* global google, $ */ 'use strict';
 
 var Application = window.Application = (function() {
   return {
     run: function() {
 		  $(document).ready(function() {
-			'use strict';
-			if ("geolocation" in navigator) {
+			if ('geolocation' in navigator) {
 				console.log('good to go');
 			} else {
 			  console.log('shit is going down');
 			}
 
 			navigator.geolocation.getCurrentPosition(function(position) {
-				var ll = position.coords.latitude + ',' +position.coords.longitude;
+				var mylat = position.coords.latitude;
+				var mylng = position.coords.longitude;
+				var ll = mylat + ', ' + mylng;
 		  	console.log(ll);
 
 				var url = 'https://api.foursquare.com/v2/venues/explore?';
@@ -39,7 +40,7 @@ var Application = window.Application = (function() {
 					generateTitle(placeArray);
 					var latitude = placeArray.venue.location.lat;
 					var longitude =placeArray.venue.location.lng;
-					google.maps.event.addDomListener(window, 'load', initialize(latitude, longitude));
+					google.maps.event.addDomListener(window, 'load', initialize(mylat, mylng, latitude, longitude));
 				}, function(xhr, status, error) {
 					console.log(status);
 					console.log('failed (promises): ' + error);
@@ -62,20 +63,43 @@ var Application = window.Application = (function() {
 				$('<h3>').text(array.venue.name).appendTo('div.title');
 				// $('div.title').append(array.venue.name);
 			}
-
-		function initialize(lat, lng) {
-		  var myLatlng = new google.maps.LatLng(lat, lng);
+		var directionsDisplay;
+		var directionsService = new google.maps.DirectionsService();
+		var map;
+		function initialize(mylat, mylng, lat, lng) {
+			directionsDisplay = new google.maps.DirectionsRenderer();
+		  var myLatlng = new google.maps.LatLng(mylat, mylng);
+		  var foodLatlng = new google.maps.LatLng(lat, lng);
 			var mapOptions = {
-			  zoom: 16,
+			  zoom: 15,
 			  center: myLatlng
 			};
-			var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
 			var marker = new google.maps.Marker({
-			    position: myLatlng,
-			    title:""
+			    position: foodLatlng,
+			    title:'Go here!'
 			});
 			marker.setMap(map);
+			directionsDisplay.setMap(map);
+			calcRoute(mylat, mylng, lat, lng);
+		}
+		function calcRoute(mylat, mylng, lat, lng) {
+			var start = mylat + ',' + mylng;
+			var end = lat + ',' + lng;
+			console.log(end);
+			console.log(google.maps.TravelMode.WALKING)
+			var request = {
+				origin:start,
+				destination:end,
+				travelMode: google.maps.TravelMode.WALKING
+			};
+			directionsService.route(request, function(result, status) {
+				console.log(google.maps)
+				if (status === google.maps.DirectionsStatus.OK) {
+					directionsDisplay.setDirections(result);
+				}
+			});
 		}
 
     },
