@@ -24,7 +24,7 @@ var Application = window.Application = (function() {
 					'v': '20140612',
 					'radius': '1000',
 					'section': 'food',
-					'limit': '20',
+					'limit': '200',
 					'venuePhotos': '1'
 				};
 				$.ajax(url, { dataType: 'jsonp', data: fourSquareOptions})
@@ -32,7 +32,7 @@ var Application = window.Application = (function() {
 					console.log(status);
 					console.log('success (promises): ' + data);
 					var dataArray = data.response.groups[0].items;
-
+					console.log(data);
 					var rngNumb = Math.floor((Math.random() * dataArray.length));
 					var placeArray = data.response.groups[0].items[rngNumb];
 					generatePics(generatePicUrl(placeArray));
@@ -60,7 +60,10 @@ var Application = window.Application = (function() {
 			}
 		function generateTitle (array) {
 				$('<h3>').text(array.venue.name).appendTo('div.title');
-				// $('div.title').append(array.venue.name);
+				$('<h6>').text(array.venue.contact.formattedPhone).appendTo('div.phone');
+				$('<p>').text(array.venue.location.address).appendTo('div.address');
+				$('<p>').text(array.venue.location.city + ', ' + array.venue.location.state).appendTo('div.address');
+
 			}
 
 		function initialize(lat, lng) {
