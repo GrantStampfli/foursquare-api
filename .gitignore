@@ -1,1 +1,4 @@
-bower_components
+node_modules
+tmp
+dist
+app/bower_components
