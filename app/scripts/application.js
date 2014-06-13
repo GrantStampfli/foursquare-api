@@ -49,7 +49,11 @@ var Application = window.Application = (function() {
 						var newLat = buttonItems.venue.location.lat;
 						var newLng = buttonItems.venue.location.lng;
 						$('div.img').empty();
+						$('div.title').empty();
+						$('div.phone').empty();
+						$('div.address').empty();
 						$('<img>').attr('src', generatePicUrl(buttonItems)).appendTo('div.img');
+						generateTitle(buttonItems);
 						initialize(mylat, mylng, newLat, newLng);
 					});
 				}, function(xhr, status, error) {
