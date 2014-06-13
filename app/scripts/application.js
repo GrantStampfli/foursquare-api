@@ -34,17 +34,23 @@ var Application = window.Application = (function() {
 					console.log('success (promises): ' + data);
 					var dataArray = data.response.groups[0].items;
 					console.log(data);
-					var rngNumb = Math.floor((Math.random() * dataArray.length));
-					var placeArray = data.response.groups[0].items[rngNumb];
+					function makeRNG (){
+						var rngNumb = Math.floor((Math.random() * dataArray.length));
+						return rngNumb;
+					}
+					var placeArray = data.response.groups[0].items[makeRNG()];
 					generatePics(generatePicUrl(placeArray));
 					generateTitle(placeArray);
 					var latitude = placeArray.venue.location.lat;
 					var longitude =placeArray.venue.location.lng;
 					google.maps.event.addDomListener(window, 'load', initialize(mylat, mylng, latitude, longitude));
 					$( '#reload' ).click(function() {
-						var buttonItems = dataArray[5];
+						var buttonItems = dataArray[makeRNG()];
+						var newLat = buttonItems.venue.location.lat;
+						var newLng = buttonItems.venue.location.lng;
 						$('div.img').empty();
 						$('<img>').attr('src', generatePicUrl(buttonItems)).appendTo('div.img');
+						initialize(mylat, mylng, newLat, newLng);
 					});
 				}, function(xhr, status, error) {
 					console.log(status);
