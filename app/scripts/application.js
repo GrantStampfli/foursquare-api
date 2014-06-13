@@ -41,6 +41,11 @@ var Application = window.Application = (function() {
 					var latitude = placeArray.venue.location.lat;
 					var longitude =placeArray.venue.location.lng;
 					google.maps.event.addDomListener(window, 'load', initialize(mylat, mylng, latitude, longitude));
+					$( '#reload' ).click(function() {
+						var buttonItems = dataArray[5];
+						$('div.img').empty();
+						$('<img>').attr('src', generatePicUrl(buttonItems)).appendTo('div.img');
+					});
 				}, function(xhr, status, error) {
 					console.log(status);
 					console.log('failed (promises): ' + error);
@@ -72,18 +77,11 @@ var Application = window.Application = (function() {
 		function initialize(mylat, mylng, lat, lng) {
 			directionsDisplay = new google.maps.DirectionsRenderer();
 		  var myLatlng = new google.maps.LatLng(mylat, mylng);
-		  var foodLatlng = new google.maps.LatLng(lat, lng);
 			var mapOptions = {
 			  zoom: 15,
 			  center: myLatlng
 			};
 			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-			// var marker = new google.maps.Marker({
-			//     position: foodLatlng,
-			//     title:'Go here!'
-			// });
-			// marker.setMap(map);
 			directionsDisplay.setMap(map);
 			calcRoute(mylat, mylng, lat, lng);
 		}
