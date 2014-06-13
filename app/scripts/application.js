@@ -79,11 +79,11 @@ var Application = window.Application = (function() {
 			};
 			map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-			var marker = new google.maps.Marker({
-			    position: foodLatlng,
-			    title:'Go here!'
-			});
-			marker.setMap(map);
+			// var marker = new google.maps.Marker({
+			//     position: foodLatlng,
+			//     title:'Go here!'
+			// });
+			// marker.setMap(map);
 			directionsDisplay.setMap(map);
 			calcRoute(mylat, mylng, lat, lng);
 		}
@@ -91,14 +91,14 @@ var Application = window.Application = (function() {
 			var start = mylat + ',' + mylng;
 			var end = lat + ',' + lng;
 			console.log(end);
-			console.log(google.maps.TravelMode.WALKING)
+			console.log(google.maps.TravelMode.WALKING);
 			var request = {
 				origin:start,
 				destination:end,
 				travelMode: google.maps.TravelMode.WALKING
 			};
 			directionsService.route(request, function(result, status) {
-				console.log(google.maps)
+				console.log(google.maps);
 				if (status === google.maps.DirectionsStatus.OK) {
 					directionsDisplay.setDirections(result);
 				}
