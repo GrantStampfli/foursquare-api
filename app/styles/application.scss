@@ -13,13 +13,11 @@
 		margin: 0;
 		padding: 0;
 		background-color: black;
-		clear: both;
 	}
 	.img{
 		display: block;
 		margin: 0 auto;
 		width: 500px;
-		clear: both;
 	}
 	.title{
 		clear:both;
@@ -33,7 +31,7 @@
 		text-transform: uppercase;
 		color: white;
 		font-family: Arial;
-		float: left;
+		text-align: center;
 	}
 	.phone{
 		clear: both;
@@ -41,6 +39,18 @@
 		text-transform: uppercase;
 		color: white;
 		font-family: Arial;
+	}
+	.reload{
+		width: 500px;
+		display: block;
+		margin: 0 auto;
+		&:focus,
+		&:hover{
+			background-color: yellow;
+			}
+		&:active {
+			box-shadow: 0 0 8px;
+	}
 	}
 	#map-canvas {
 		height: 250px;
