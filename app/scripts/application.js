@@ -14,8 +14,6 @@ var Application = window.Application = (function() {
 				var mylat = position.coords.latitude;
 				var mylng = position.coords.longitude;
 				var ll = mylat + ', ' + mylng;
-		  	console.log(ll);
-
 				var url = 'https://api.foursquare.com/v2/venues/explore?';
 				var fourSquareOptions = {
 					'll': ll,
@@ -30,20 +28,18 @@ var Application = window.Application = (function() {
 				};
 				$.ajax(url, { dataType: 'jsonp', data: fourSquareOptions})
 				.then(function(data, status, xhr) {
-					console.log(status);
 					console.log('success (promises): ' + data);
 					var dataArray = data.response.groups[0].items;
-					console.log(data);
 					function makeRNG (){
 						var rngNumb = Math.floor((Math.random() * dataArray.length));
 						return rngNumb;
 					}
-					var placeArray = data.response.groups[0].items[makeRNG()];
-					generatePics(generatePicUrl(placeArray));
-					generateTitle(placeArray);
-					var latitude = placeArray.venue.location.lat;
-					var longitude =placeArray.venue.location.lng;
-					google.maps.event.addDomListener(window, 'load', initialize(mylat, mylng, latitude, longitude));
+					var place = dataArray[makeRNG()];
+					generatePics(generatePicUrl(place));
+					generateTitle(place);
+					var placeLat = place.venue.location.lat;
+					var placeLng =place.venue.location.lng;
+					google.maps.event.addDomListener(window, 'load', initialize(mylat, mylng, placeLat, placeLng));
 					$( '#reload' ).click(function() {
 						var buttonItems = dataArray[makeRNG()];
 						var newLat = buttonItems.venue.location.lat;
@@ -98,8 +94,6 @@ var Application = window.Application = (function() {
 		function calcRoute(mylat, mylng, lat, lng) {
 			var start = mylat + ',' + mylng;
 			var end = lat + ',' + lng;
-			console.log(end);
-			console.log(google.maps.TravelMode.WALKING);
 			var request = {
 				origin:start,
 				destination:end,
