@@ -15,7 +15,7 @@ var Application = window.Application = (function() {
 			 		'client_id': 'ZEFCPOZI0JUGL1H2IKFMHO1PLHSWCOKKZSDOUSPHYQ2QHNEO',
 					'client_secret': 'I214RPZ3LOUZXYXAESRLBGZRJCVI2J1EKYPVSOGPPCH5RZQN',
 					'v': '20140612',
-					'radius': '1000',
+					'radius': '7000',
 					'section': 'food',
 					'limit': '200',
 					'venuePhotos': '1'
@@ -66,9 +66,9 @@ var Application = window.Application = (function() {
 			}
 		function generateTitle (array) {
 				$('<h3>').text(array.venue.name).appendTo('div.title');
-				$('<h6>').text(array.venue.contact.formattedPhone).appendTo('div.phone');
-				$('<p>').text(array.venue.location.address).appendTo('div.address');
-				$('<p>').text(array.venue.location.city + ', ' + array.venue.location.state).appendTo('div.address');
+				$('<h6>').text(array.venue.location.address).appendTo('div.address');
+				$('<nbsp>').text(array.venue.location.city + ', ' + array.venue.location.state).appendTo('div.address');
+				$('<h4>').text(array.venue.contact.formattedPhone).appendTo('div.phone');
 
 			}
 		var directionsDisplay;
