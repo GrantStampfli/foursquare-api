@@ -4,12 +4,6 @@ var Application = window.Application = (function() {
   return {
     run: function() {
 		  $(document).ready(function() {
-			if ('geolocation' in navigator) {
-				console.log('good to go');
-			} else {
-			  console.log('shit is going down');
-			}
-
 			navigator.geolocation.getCurrentPosition(function(position) {
 				var mylat = position.coords.latitude;
 				var mylng = position.coords.longitude;
@@ -100,7 +94,6 @@ var Application = window.Application = (function() {
 				travelMode: google.maps.TravelMode.WALKING
 			};
 			directionsService.route(request, function(result, status) {
-				console.log(google.maps);
 				if (status === google.maps.DirectionsStatus.OK) {
 					directionsDisplay.setDirections(result);
 				}
