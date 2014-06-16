@@ -2,6 +2,9 @@
 
 var gulp = require('gulp');
 var path = require('path');
+var util = require('util');
+var colors = require('chalk');
+var gutil = require('gulp-util');
 var es = require('event-stream');
 var $ = require('gulp-load-plugins')();
 var _ = require('lodash');
@@ -17,7 +20,12 @@ var lr = require('tiny-lr')();
 var paths = (function() {
   var table = {
     'src.project.scripts': ['./*.js'],
-    'src.app.html': ['app/**/*.html', '!app/bower_components/**/*'],
+    'src.app.static': [
+      'app/**/*',
+      '!app/scripts/**/*',
+      '!app/styles/**/*',
+      '!app/bower_components/**/*'
+    ],
     'src.app.scripts': ['app/scripts/**/*.js'],
     'src.app.scripts.entry': ['app/scripts/application.js'],
     'src.app.scripts.vendor': ['app/scripts/vendor.js'],
@@ -26,7 +34,7 @@ var paths = (function() {
     'src.app.styles.vendor': ['app/styles/vendor.scss'],
     'src.app.tests': ['test/app_helper.js', 'test/app/**/*.js'],
     'dest.root': '<%= dist %>',
-    'dest.app.html': '<%= dist %>/public',
+    'dest.app.static': '<%= dist %>/public',
     'dest.app.scripts': '<%= dist %>/public/scripts',
     'dest.app.styles': '<%= dist %>/public/styles'
   };
@@ -80,6 +88,13 @@ var browserify = function() {
     var chunks = [];
     var bundle = browserifier.bundle();
     bundle.on('data', chunks.push.bind(chunks));
+    bundle.on('error', function(e) {
+      gutil.log(util.format('%s: %s',
+        colors.red('browserify'),
+        e.message));
+      this.queue(null);
+      this.resume();
+    }.bind(this));
     bundle.on('end', function() {
       file.contents = Buffer.concat(chunks);
       this.queue(file);
@@ -102,8 +117,9 @@ tasks['.serve'] = function(options) {
   var connect = require('connect');
   var http = require('http');
   var app = connect()
+    .use(require('morgan')('dev'))
     .use(require('connect-livereload')({ port: LIVERELOAD_PORT }))
-    .use(require('serve-static')(path.resolve(paths('dest.app.html', opts))));
+    .use(require('serve-static')(path.resolve(paths('dest.app.static', opts))));
 
   http.createServer(app).listen(SERVER_PORT, function() {
     setTimeout(function() {
@@ -120,7 +136,7 @@ tasks['.watch'] = function(options) {
   if (opts.app) {
     gulp.watch(paths('src.app.scripts', opts), ['lint', '.scripts:app:dev:update']);
     gulp.watch(paths('src.app.styles', opts), ['.styles:app:dev:update']);
-    gulp.watch(paths('src.app.html', opts), ['.html:app:dev']);
+    gulp.watch(paths('src.app.static', opts), ['.static:app:dev']);
   }
 };
 
@@ -193,13 +209,16 @@ tasks['.styles:app'] = function(options) {
   return stream;
 };
 
-tasks['.html:app'] = function(options) {
+tasks['.static:app'] = function(options) {
   var opts = options || {};
   var env = opts.env || 'development';
   var context = { GULP_ENVIRONMENT: env };
-  return gulp.src(paths('src.app.html', opts))
+  var htmlFilter = $.filter(['**/*.html', '**/*.htm']);
+  return gulp.src(paths('src.app.static', opts))
+    .pipe(htmlFilter)
     .pipe($.preprocess({ context: context }))
-    .pipe(gulp.dest(paths('dest.app.html', opts)))
+    .pipe(htmlFilter.restore())
+    .pipe(gulp.dest(paths('dest.app.static', opts)))
     .pipe($.livereload(lr));
 };
 
@@ -231,12 +250,12 @@ tasks['.clean'] = function(options) {
  * Private Tasks
  */
 
-gulp.task('.html:app:dev', function() {
-  return tasks['.html:app'](environment('development'));
+gulp.task('.static:app:dev', function() {
+  return tasks['.static:app'](environment('development'));
 });
 
-gulp.task('.html:app:dist', function() {
-  return tasks['.html:app'](environment('distribution'));
+gulp.task('.static:app:dist', function() {
+  return tasks['.static:app'](environment('distribution'));
 });
 
 gulp.task('.styles:app:dev', function() {
@@ -263,8 +282,8 @@ gulp.task('.scripts:app:dist', function() {
   return tasks['.scripts:app'](_.merge(environment('distribution'), { all: true }));
 });
 
-gulp.task('.build:app:dev', ['.html:app:dev', '.styles:app:dev', '.scripts:app:dev']);
-gulp.task('.build:app:dist', ['.html:app:dist', '.styles:app:dist', '.scripts:app:dist']);
+gulp.task('.build:app:dev', ['.static:app:dev', '.styles:app:dev', '.scripts:app:dev']);
+gulp.task('.build:app:dist', ['.static:app:dist', '.styles:app:dist', '.scripts:app:dist']);
 
 gulp.task('.watch:app:dev', function() {
   return tasks['.watch']({ app: true });

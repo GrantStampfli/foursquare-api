@@ -18,7 +18,12 @@
 		display: block;
 		margin: 0 auto;
 		width: 500px;
-		max-width: 95%;
+		max-width: 100%;
+			*, *:before, *:after {
+	  -webkit-box-sizing: border-box;
+	  -moz-box-sizing: border-box;
+	  box-sizing: auto;
+	}
 	}
 	.title{
 		text-transform: uppercase;
@@ -59,10 +64,4 @@
 		display: block;
 		margin: 0 auto;
 	}
-	// 	*, *:before, *:after {
-	//   -webkit-box-sizing: border-box;
-	//   -moz-box-sizing: border-box;
-	//   box-sizing: auto;
-	//   width: auto;
-	//   max-width: 100%;
-	// }
+
