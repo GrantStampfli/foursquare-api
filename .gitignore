@@ -3,3 +3,4 @@ tmp
 dist
 app/bower_components
 bower_components
+npm-debug.log
