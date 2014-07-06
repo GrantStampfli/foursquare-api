@@ -101,9 +101,6 @@ var Application = window.Application = (function() {
 		}
 
     },
-    controllers: {
-      posts: require('./controllers/posts')
-    }
   };
 
 })();
